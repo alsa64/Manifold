@@ -1,8 +1,8 @@
-#include "Model_OBJ.h"
+#include "Model_Mesh.h"
 #include <queue>
 #define ITER_NUM 20
 int g_sharp = 0;
-Model_Mesh::Model_OBJ()
+Model_Mesh::Model_Mesh()
 {
 }
  
