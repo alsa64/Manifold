@@ -10,8 +10,11 @@ int Model_Mesh::Load(char* filename)
 {
     using namespace Eigen;
     using namespace std;
-    // Load a mesh in OBJ format
-    igl::readOBJ(filename, V, F);
+    // Load a mesh with automatic format detection
+    if (!igl::read_triangle_mesh(filename, V, F)) {
+        cerr << "Error: Failed to read mesh file: " << filename << endl;
+        return 1;
+    }
     fn = filename;
     // Make the example deterministic
     srand(0);
