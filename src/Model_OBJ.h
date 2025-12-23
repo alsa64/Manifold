@@ -17,7 +17,8 @@
 #include "BVH.h"
 #include <map>
 #include <cstdlib>
-#include <igl/readOBJ.h>
+#include <igl/read_triangle_mesh.h>
+#include <igl/write_triangle_mesh.h>
 using namespace std;
 /*************************************************************************** 
   OBJ Loading 
