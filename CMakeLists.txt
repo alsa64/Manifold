@@ -11,8 +11,7 @@ option(BUILD_PERFORMANCE_TEST "More subdivisition for performance test" OFF)
 option(BUILD_OPENMP "Enable support for OpenMP" OFF)
 option(BUILD_LOG "Enable verbose log" OFF)
 
-include_directories(src)
-include_directories(3rd)
+# Include directories now set per-target below
 
 # Compile definitions now set per-target below
 
@@ -90,5 +89,16 @@ target_compile_definitions(manifold PRIVATE
 
 target_compile_definitions(simplify PRIVATE
   $<$<BOOL:${BUILD_LOG}>:LOG_OUTPUT>
+)
+
+# Target-specific include directories
+target_include_directories(manifold PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}/3rd"
+)
+
+target_include_directories(simplify PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}/3rd"
 )
 
