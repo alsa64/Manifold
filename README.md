@@ -18,6 +18,8 @@ wget -i categories.txt
 
 ## Install and Run
 
+Pre-built binaries for Linux, macOS, and Windows are available in [Releases](../../releases). To create a new release, push a tag starting with `v` (e.g., `v1.0.0`).
+
 For Linux and Mac users, run `sh demo.sh` to build and try the manifold example.
 
 ### Install
