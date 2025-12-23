@@ -991,19 +991,33 @@ void Model_Mesh::SaveOBJ(const char* filename)
 
 void Model_Mesh::Save(const char* filename, bool color)
 {
-	std::ofstream os(filename);
-	if (color)
-		os << "COFF\n";
-	else
-		os << "OFF\n";
-	os << vertices.size() << " " << face_indices.size() << " " << 0 << "\n";
-	for (int i = 0; i < (int)vertices.size(); ++i)
-	{
-		if (color)
-			os << vertices[i][0] << " " << vertices[i][1] << " " << vertices[i][2] << " " << (int)(colors[i][2]*255) << " " << (int)(colors[i][1]*255) << " " << (int)(colors[i][0]*255) << " 255\n";
-		else
-			os << vertices[i][0] << " " << vertices[i][1] << " " << vertices[i][2] << "\n";
+	using namespace std;
+	using namespace Eigen;
+
+	// Convert glm vectors back to Eigen matrices
+	MatrixXd V_out(vertices.size(), 3);
+	MatrixXi F_out(face_indices.size(), 3);
+
+	for (int i = 0; i < (int)vertices.size(); ++i) {
+		V_out(i, 0) = vertices[i][0];
+		V_out(i, 1) = vertices[i][1];
+		V_out(i, 2) = vertices[i][2];
 	}
+
+	for (int i = 0; i < (int)face_indices.size(); ++i) {
+		F_out(i, 0) = face_indices[i][0];
+		F_out(i, 1) = face_indices[i][1];
+		F_out(i, 2) = face_indices[i][2];
+	}
+
+	// Use write_triangle_mesh for automatic format detection
+	// force_ascii=true for better compatibility
+	if (!igl::write_triangle_mesh(filename, V_out, F_out, true)) {
+		cerr << "Error: Failed to write mesh file: " << filename << endl;
+		return;
+	}
+
+	// Print edge length statistics
 	double min_len = 1e30, max_len = -1e30;
 	for (int i = 0; i < (int)face_indices.size(); ++i)
 	{
@@ -1017,9 +1031,7 @@ void Model_Mesh::Save(const char* filename, bool color)
 			if (len > max_len)
 				max_len = len;
 		}
-		os << "3 " << face_indices[i][0] << " " << face_indices[i][1] << " " << face_indices[i][2] << "\n";
 	}
-	os.close();
 	cout << min_len << " " << max_len << "\n";
 }
 
