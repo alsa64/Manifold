@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Model_OBJ.h"
+#include "Model_Mesh.h"
 extern int g_sharp;
 int main(int argc, char** argv)
 {
-  Model_OBJ obj;
+  Model_Mesh obj;
   int resolution = 20000;
   if (argc < 3)
   {
