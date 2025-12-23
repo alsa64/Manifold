@@ -20,9 +20,9 @@ set(
     src/Intersection.cpp
     src/Intersection.h
     src/main.cpp
-    src/Model_OBJ.cpp
-    src/Model_OBJ.h
-    src/Octree.h    
+    src/Model_Mesh.cpp
+    src/Model_Mesh.h
+    src/Octree.h
 )
 
 set(
