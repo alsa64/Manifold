@@ -3,12 +3,7 @@ project(Manifold)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-# C++ standard now set per-target below
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pthread")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")  # enable assert
-set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS}")
-set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG}")
+# C++ standard and compile flags now set per-target below
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-int-in-bool-context -Wsign-compare")
@@ -66,4 +61,17 @@ add_executable(
 # Target-specific C++ standard
 target_compile_features(manifold PRIVATE cxx_std_11)
 target_compile_features(simplify PRIVATE cxx_std_11)
+
+# Target-specific compile options
+target_compile_options(manifold PRIVATE
+  -Wall
+  -pthread
+  $<$<CONFIG:Release>:-O3>
+)
+
+target_compile_options(simplify PRIVATE
+  -Wall
+  -pthread
+  $<$<CONFIG:Release>:-O3>
+)
 
