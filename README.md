@@ -31,10 +31,12 @@ make
 
 ### Manifold Software
 
-We take a triangle mesh "input.obj" and generate a manifold "output.obj". The resolution is the number of leaf nodes of octree. The face number increases linearly with the resolution.
+We take a triangle mesh and generate a manifold. The resolution is the number of leaf nodes of octree. The face number increases linearly with the resolution.
+
+Supported formats: OBJ, STL, PLY, OFF (automatically detected from file extension)
 
 ```sh
-./manifold input.obj output.obj [resolution (Default 20000)]
+./manifold input.[obj|stl|ply|off] output.[obj|stl|ply|off] [resolution (Default 20000)]
 ```
 
 ### Simplify Algorithm
