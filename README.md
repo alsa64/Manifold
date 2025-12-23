@@ -1,5 +1,7 @@
 # Watertight Manifold
 
+> **Fork Notice**: This fork includes CMake modernization, Eigen compilation fixes for modern compilers, and multi-format mesh support (OBJ, STL, PLY, OFF).
+
 Source code for the paper:
 
 Huang, Jingwei, Hao Su, and Leonidas Guibas. [**Robust Watertight Manifold Surface Generation Method for ShapeNet Models.**](https://arxiv.org/abs/1802.01698), arXiv preprint arXiv:1802.01698 (2018).
