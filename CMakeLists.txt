@@ -14,17 +14,7 @@ option(BUILD_LOG "Enable verbose log" OFF)
 include_directories(src)
 include_directories(3rd)
 
-if(BUILD_PERFORMANCE_TEST)
-    add_definitions(-DPERFORMANCE_TEST)
-endif(BUILD_PERFORMANCE_TEST)
-
-if(BUILD_OPENMP)
-    add_definitions(-DWITH_OMP)
-endif(BUILD_OPENMP)
-
-if(BUILD_LOG)
-    add_definitions(-DLOG_OUTPUT)
-endif(BUILD_LOG)
+# Compile definitions now set per-target below
 
 set(
     manifold_SRC
@@ -90,4 +80,15 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     $<$<CONFIG:Debug>:-fsanitize=address>
   )
 endif()
+
+# Target-specific compile definitions
+target_compile_definitions(manifold PRIVATE
+  $<$<BOOL:${BUILD_PERFORMANCE_TEST}>:PERFORMANCE_TEST>
+  $<$<BOOL:${BUILD_OPENMP}>:WITH_OMP>
+  $<$<BOOL:${BUILD_LOG}>:LOG_OUTPUT>
+)
+
+target_compile_definitions(simplify PRIVATE
+  $<$<BOOL:${BUILD_LOG}>:LOG_OUTPUT>
+)
 
