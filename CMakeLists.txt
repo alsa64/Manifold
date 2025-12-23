@@ -5,12 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # C++ standard and compile flags now set per-target below
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-int-in-bool-context -Wsign-compare")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS}")
-    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-endif()
+# GNU-specific flags handled per-target below
 
 option(BUILD_PERFORMANCE_TEST "More subdivisition for performance test" OFF)
 option(BUILD_OPENMP "Enable support for OpenMP" OFF)
@@ -74,4 +69,25 @@ target_compile_options(simplify PRIVATE
   -pthread
   $<$<CONFIG:Release>:-O3>
 )
+
+# GNU-specific compile and link options
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  target_compile_options(manifold PRIVATE
+    -Wno-int-in-bool-context
+    -Wsign-compare
+    $<$<CONFIG:Debug>:-fsanitize=address>
+  )
+  target_compile_options(simplify PRIVATE
+    -Wno-int-in-bool-context
+    -Wsign-compare
+    $<$<CONFIG:Debug>:-fsanitize=address>
+  )
+
+  target_link_options(manifold PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address>
+  )
+  target_link_options(simplify PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address>
+  )
+endif()
 
