@@ -2,11 +2,11 @@
 #include <queue>
 #define ITER_NUM 20
 int g_sharp = 0;
-Model_OBJ::Model_OBJ()
+Model_Mesh::Model_OBJ()
 {
 }
  
-int Model_OBJ::Load(char* filename)
+int Model_Mesh::Load(char* filename)
 {
     using namespace Eigen;
     using namespace std;
@@ -26,7 +26,7 @@ int Model_OBJ::Load(char* filename)
 	return 0;
 }
  
-void Model_OBJ::Calc_Bounding_Box()
+void Model_Mesh::Calc_Bounding_Box()
 {
 	min_corner = glm::dvec3(1e30,1e30,1e30);
 	max_corner = -min_corner;
@@ -49,7 +49,7 @@ void Model_OBJ::Calc_Bounding_Box()
 	max_corner += length * 0.2;
 }
 
-void Model_OBJ::Build_Tree(int resolution)
+void Model_Mesh::Build_Tree(int resolution)
 {
 	Calc_Bounding_Box();
 	tree = new Octree(min_corner, max_corner, face_indices, 0.01);
@@ -85,7 +85,7 @@ void Model_OBJ::Build_Tree(int resolution)
 	}
 }
 
-glm::dvec3 Model_OBJ::Closest_Point( const glm::dvec3 *triangle, const glm::dvec3 &sourcePosition )
+glm::dvec3 Model_Mesh::Closest_Point( const glm::dvec3 *triangle, const glm::dvec3 &sourcePosition )
 {
     glm::dvec3 edge0 = triangle[1] - triangle[0];
     glm::dvec3 edge1 = triangle[2] - triangle[0];
@@ -182,7 +182,7 @@ glm::dvec3 Model_OBJ::Closest_Point( const glm::dvec3 *triangle, const glm::dvec
     return triangle[0] + s * edge0 + t * edge1;
 }
 
-void Model_OBJ::Construct_Manifold()
+void Model_Mesh::Construct_Manifold()
 {
 	map<Grid_Index,int> vcolor;
 	vector<glm::dvec3> nvertices;
@@ -220,7 +220,7 @@ void Model_OBJ::Construct_Manifold()
 	face_indices = triangles;
 }
 
-glm::dvec3 Model_OBJ::Find_Closest(int i)
+glm::dvec3 Model_Mesh::Find_Closest(int i)
 {
 	glm::dvec3 cpoint = glm::dvec3(1e20,1e20,1e20);
 	glm::dvec3 tris[3];
@@ -243,7 +243,7 @@ glm::dvec3 Model_OBJ::Find_Closest(int i)
 	return cpoint + normal * 5e-4;
 }
 
-void Model_OBJ::Project_Manifold()
+void Model_Mesh::Project_Manifold()
 {
 	double len = glm::length(vertices[face_indices[0][1]] - vertices[face_indices[0][0]]);
 	double min_len = glm::length(vertices[face_indices[0][2]] - vertices[face_indices[0][0]]);
@@ -464,7 +464,7 @@ for (int iter = 0; iter < ITER_NUM; ++iter) {
 }
 }
 
-bool Model_OBJ::Project(glm::dvec3& o, glm::dvec3& d)
+bool Model_Mesh::Project(glm::dvec3& o, glm::dvec3& d)
 {
 	pair<glm::dvec3,bool> p = bvh->rayIntersect(o, d);
 	if (!p.second)
@@ -473,7 +473,7 @@ bool Model_OBJ::Project(glm::dvec3& o, glm::dvec3& d)
 	return true;
 }
 
-void Model_OBJ::Build_BVH()
+void Model_Mesh::Build_BVH()
 {
 	bvh = new BVH();
 	bvs.resize(face_indices.size());
@@ -486,7 +486,7 @@ void Model_OBJ::Build_BVH()
 //	bvh->updateBVH(bvs, 0, 0, bvs.size()-1);
 }
 
-void Model_OBJ::Process_Manifold(int resolution)
+void Model_Mesh::Process_Manifold(int resolution)
 {
 	vertices_buf = vertices;
 	face_indices_buf = face_indices;
@@ -528,7 +528,7 @@ void Model_OBJ::Process_Manifold(int resolution)
 	}
 }
 
-bool Model_OBJ::Split_Grid(map<Grid_Index,int>& vcolor, vector<glm::dvec3>& nvertices, vector<glm::ivec4>& nface_indices, vector<set<int> >& v_faces, vector<glm::ivec3>& triangles)
+bool Model_Mesh::Split_Grid(map<Grid_Index,int>& vcolor, vector<glm::dvec3>& nvertices, vector<glm::ivec4>& nface_indices, vector<set<int> >& v_faces, vector<glm::ivec3>& triangles)
 {
 	double unit_len = 0;
 	v_info.resize(vcolor.size());
@@ -909,7 +909,7 @@ bool Model_OBJ::Split_Grid(map<Grid_Index,int>& vcolor, vector<glm::dvec3>& nver
 	return true;
 }
 
-int Model_OBJ::is_manifold()
+int Model_Mesh::is_manifold()
 {
 	map<pair<int,int>,list<glm::dvec3> > edges;
 	vector<set<int> > graph(vertices.size());
@@ -972,7 +972,7 @@ int Model_OBJ::is_manifold()
 	return flag;
 }
 
-void Model_OBJ::SaveOBJ(const char* filename)
+void Model_Mesh::SaveOBJ(const char* filename)
 {
 	std::ofstream os(filename);
 	for (int i = 0; i < (int)vertices.size(); ++i)
@@ -986,7 +986,7 @@ void Model_OBJ::SaveOBJ(const char* filename)
 	os.close();
 }
 
-void Model_OBJ::Save(const char* filename, bool color)
+void Model_Mesh::Save(const char* filename, bool color)
 {
 	std::ofstream os(filename);
 	if (color)

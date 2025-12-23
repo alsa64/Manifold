@@ -1,5 +1,5 @@
-#ifndef Model_OBJ_H_
-#define Model_OBJ_H_
+#ifndef Model_Mesh_H_
+#define Model_Mesh_H_
 
 #include <iostream>
 #include <fstream>
@@ -20,13 +20,13 @@
 #include <igl/read_triangle_mesh.h>
 #include <igl/write_triangle_mesh.h>
 using namespace std;
-/*************************************************************************** 
-  OBJ Loading 
+/***************************************************************************
+  Mesh Loading
  ***************************************************************************/
- 
-class Model_OBJ
+
+class Model_Mesh
 {
-  public: 
+  public:
   	struct Edge_Info
   	{
   		int face_x, face_y;
@@ -34,7 +34,7 @@ class Model_OBJ
   	};
   vector<set<int> > v_faces;
 
-	Model_OBJ();			
+	Model_Mesh();			
   int Load(char *filename);	// Loads the model
 
  	void Calc_Bounding_Box();
