@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Manifold)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-
 # C++ standard and compile flags now set per-target below
 
 # GNU-specific flags handled per-target below
